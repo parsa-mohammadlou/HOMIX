@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{product.name}}| HOMIX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #ffffff 100%);
+            background-attachment: fixed;
+            color: #1e293b;
+            padding-bottom: 40px;
+        }
+
+        /* ==================== هدر ==================== */
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 14px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            background: #dbeafe;
+        }
+
+        .back-link::before {
+            content: '→';
+            font-size: 15px;
+        }
+
+        /* ==================== محتوا ==================== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* ==================== کارت اصلی محصول ==================== */
+        .product-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.10),
+                0 4px 12px rgba(37, 99, 235, 0.05);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 24px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 36px;
+            align-items: start;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+        }
+
+        /* ==================== تصویر محصول ==================== */
+        .product-image-wrapper {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border-radius: 20px;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image-wrapper .placeholder-icon {
+            width: 100px;
+            height: 100px;
+            stroke: #2563eb;
+        }
+
+        /* ==================== اطلاعات محصول ==================== */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .product-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.4;
+        }
+
+        /* امتیاز و موجودی */
+        .product-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13.5px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .rating svg {
+            width: 16px;
+            height: 16px;
+            fill: #fbbf24;
+            stroke: #fbbf24;
+        }
+
+        .stock {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .stock.in-stock {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        .stock.out-stock {
+            background: #fff1f1;
+            color: #d93025;
+        }
+
+        .stock::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* قیمت */
+        .product-price-box {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .price-label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .price-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .price-value small {
+            font-size: 13px;
+            font-weight: 500;
+            color: #64748b;
+            margin-right: 4px;
+        }
+
+        /* توضیحات کوتاه */
+        .product-short-desc {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.9;
+        }
+
+        /* ==================== کنترل تعداد و افزودن ==================== */
+        .purchase-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: auto;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 5px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .quantity-control button {
+            width: 38px;
+            height: 38px;
+            border: none;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #2563eb;
+            font-size: 19px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(37, 99, 235, 0.08);
+        }
+
+        .quantity-control button:hover {
+            background: #eff6ff;
+        }
+
+        .quantity-control button:active {
+            transform: scale(0.95);
+        }
+
+        .quantity-control .qty-value {
+            min-width: 40px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .add-to-cart-btn {
+            flex: 1;
+            min-width: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 24px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.35);
+        }
+
+        .add-to-cart-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .add-to-cart-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: #ffffff;
+        }
+
+        /* ==================== توضیحات کامل ==================== */
+        .description-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 26px 30px;
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.10),
+                0 4px 12px rgba(37, 99, 235, 0.05);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .description-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            border-radius: 2px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+        }
+
+        .description-card p {
+            font-size: 14px;
+            color: #475569;
+            line-height: 2;
+        }
+
+        /* ==================== محصولات مشابه ==================== */
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .related-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+
+        .related-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.15);
+        }
+
+        .related-image {
+            width: 100%;
+            height: 180px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .related-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .related-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.6;
+            display: -webkit-box;
+            
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .related-price {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        /* .related-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .related-card {
+            min-width: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .related-image {
+            width: 100%;
+            height: 180px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .related-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .related-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 768px) {
+            .related-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        } */
+
+        /* ==================== ریسپانسیو ==================== */
+        @media (max-width: 900px) {
+            .product-card {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 24px;
+            }
+
+            .product-image-wrapper {
+                max-width: 400px;
+                margin: 0 auto;
+                width: 100%;
+            }
+
+            .related-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .header {
+                padding: 14px 16px;
+            }
+
+            .container {
+                padding: 20px 16px;
+            }
+
+            .product-card {
+                padding: 20px;
+                border-radius: 18px;
+            }
+
+            .product-name {
+                font-size: 19px;
+            }
+
+            .product-price-box {
+                padding: 14px 16px;
+            }
+
+            .price-value {
+                font-size: 18px;
+            }
+
+            .purchase-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .quantity-control {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .quantity-control .qty-value {
+                flex: 1;
+            }
+
+            .add-to-cart-btn {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .description-card {
+                padding: 22px;
+            }
+
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .related-card {
+                padding: 12px;
+            }
+
+            .back-link {
+                padding: 8px 12px;
+                font-size: 12.5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ==================== هدر ==================== -->
+
+    <header class="header">
+        <a href="{% url 'home' %}" class="logo">HOMIX</a>
+        <a href="{% url 'home' %}" class="back-link">بازگشت به فروشگاه</a>
+    </header>
+
+    <!-- ==================== محتوا ==================== -->
+    <main class="container">
+
+        <!-- کارت اصلی محصول -->
+        <section class="product-card">
+
+            <!-- تصویر -->
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                style="width: 100%; height: 100%; object-fit: contain;">
+            {% else %}
+            <p>تصویری برای این محصول ثبت نشده است.</p>
+            {% endif %}
+
+            <!-- اطلاعات -->
+            <div class="product-info">
+
+                <h1 class="product-name">{{product.name}}</h1>
+
+                <!-- امتیاز و موجودی -->
+                <div class="product-meta">
+                    <div class="rating">
+                        <svg viewBox="0 0 24 24">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span>۴.۸ از ۵ (۱۲۴ نظر)</span>
+                    </div>
+
+                    <span class="stock in-stock"> موجودی : {{product.stock}}</span>
+                </div>
+
+                <!-- قیمت -->
+                <div class="product-price-box">
+                    <span class="price-label">قیمت محصول</span>
+                    <span class="price-value">
+                        {{product.price}} <small>تومان</small>
+                    </span>
+                </div>
+
+                <!-- توضیح کوتاه -->
+                <p class="product-short-desc">
+
+                </p>
+
+                <!-- کنترل تعداد و افزودن به سبد -->
+                <div class="purchase-section">
+
+                    <div class="quantity-control">
+                        <button type="button" onclick="decreaseQty()" aria-label="کاهش">−</button>
+                        <span class="qty-value" id="qtyValue">۱</span>
+                        <button type="button" onclick="increaseQty()" aria-label="افزایش">+</button>
+                    </div>
+
+                    <button type="button" class="add-to-cart-btn" id="addToCartBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                        </svg>
+                        افزودن به سبد خرید
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- توضیحات کامل -->
+        <section class="description-card">
+            <h2 class="section-title">توضیحات محصول</h2>
+            <p>
+                {{product.description}}
+            </p>
+        </section>
+
+        <!-- محصولات مشابه -->
+        <!-- <section>
+            <h2 class="section-title">محصولات مشابه</h2>
+            <div class="related-grid">
+
+                <a href="#" class="related-card">
+                    <div class="related-image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                    </div>
+                    <div class="related-name">هدفون اپل AirPods Pro</div>
+                    <div class="related-price">۷,۲۰۰,۰۰۰ تومان</div>
+                </a>
+
+                <a href="#" class="related-card">
+                    <div class="related-image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                    </div>
+                    <div class="related-name">هدفون بیتس Studio 3</div>
+                    <div class="related-price">۵,۸۰۰,۰۰۰ تومان</div>
+                </a>
+
+                <a href="#" class="related-card">
+                    <div class="related-image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                    </div>
+                    <div class="related-name">هدفون سامسونگ Galaxy Buds</div>
+                    <div class="related-price">۴,۵۰۰,۰۰۰ تومان</div>
+                </a>
+
+                <a href="#" class="related-card">
+                    <div class="related-image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                    </div>
+                    <div class="related-name">هدفون JBL Tune 760NC</div>
+                    <div class="related-price">۳,۲۰۰,۰۰۰ تومان</div>
+                </a>
+
+            </div>
+        </section> -->
+
+
+        <section>
+            <h2 class="section-title">محصولات مشابه</h2>
+
+            <div class="related-grid">
+
+                {% for item in related_products %}
+
+                    <a href="{% url 'product_detail' item.id %}"
+                    class="related-card">
+
+                        <div class="related-image">
+
+                            {% if item.image %}
+                                <img src="{{ item.image.url }}"
+                                    alt="{{ item.name }}">
+                            {% else %}
+                                <svg viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18"
+                                        rx="2" ry="2" />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                    <polyline points="21 15 16 10 5 21" />
+                                </svg>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="related-name">
+                            {{ item.name }}
+                        </div>
+
+                        <div class="related-price">
+                            {{ item.price }} تومان
+                        </div>
+
+                    </a>
+
+                {% empty %}
+
+                    <p>محصول مشابهی در این دسته‌بندی وجود ندارد.</p>
+
+                {% endfor %}
+
+            </div>
+        </section>
+
+
+    </main>
+    <div id="productData" data-id="{{ product.id }}" data-name="{{ product.name }}"
+        data-brand="{{ product.brand|default:'' }}" data-price="{{ product.price }}" data-stock="{{ product.stock }}">
+    </div>
+
+    <script>
+        // javascript
+        // const productData = document.getElementById("productData");
+        // const qtyValue = document.getElementById("qtyValue");
+        // const addToCartBtn = document.getElementById("addToCartBtn");
+
+        // const product = {
+        //     id: Number(productData.dataset.id),
+        //     name: productData.dataset.name,
+        //     brand: productData.dataset.brand,
+        //     price: Number(productData.dataset.price),
+        //     stock: Number(productData.dataset.stock)
+        // };
+
+        // let quantity = 1;
+
+        // function toPersian(num) {
+        //     return num.toLocaleString("fa-IR");
+        // }
+
+        // function updateQty() {
+        //     qtyValue.textContent = toPersian(quantity);
+        // }
+
+        // function increaseQty() {
+        //     if (quantity < product.stock) {
+        //         quantity++;
+        //         updateQty();
+        //     }
+        // }
+
+        // function decreaseQty() {
+        //     if (quantity > 1) {
+        //         quantity--;
+        //         updateQty();
+        //     }
+        // }
+
+        // addToCartBtn.addEventListener("click", () => {
+        //     if (product.stock < 1) {
+        //         alert("این محصول در حال حاضر موجود نیست.");
+        //         return;
+        //     }
+
+        //     let cart = [];
+
+        //     try {
+        //         cart = JSON.parse(
+        //             localStorage.getItem("homix_cart") || "[]"
+        //         );
+
+        //         if (!Array.isArray(cart)) {
+        //             cart = [];
+        //         }
+        //     } catch (error) {
+        //         cart = [];
+        //     }
+
+        //     const existingProduct = cart.find(
+        //         item => Number(item.id) === product.id
+        //     );
+
+        //     const currentQuantity = existingProduct
+        //         ? Number(existingProduct.quantity)
+        //         : 0;
+
+        //     if (currentQuantity + quantity > product.stock) {
+        //         alert("تعداد انتخاب‌شده بیشتر از موجودی محصول است.");
+        //         return;
+        //     }
+
+        //     if (existingProduct) {
+        //         existingProduct.quantity += quantity;
+        //     } else {
+        //         cart.push({
+        //             id: product.id,
+        //             name: product.name,
+        //             brand: product.brand,
+        //             price: product.price,
+        //             quantity: quantity
+        //         });
+        //     }
+
+        //     localStorage.setItem("homix_cart", JSON.stringify(cart));
+
+        //     const originalText = addToCartBtn.innerHTML;
+        //     addToCartBtn.textContent = "✓ به سبد خرید اضافه شد";
+
+        //     setTimeout(() => {
+        //         addToCartBtn.innerHTML = originalText;
+        //     }, 2000);
+
+        // });
+
+        // updateQty();
+
+
+
+        const productData = document.getElementById("productData");
+        const qtyValue = document.getElementById("qtyValue");
+        const addToCartBtn = document.getElementById("addToCartBtn");
+
+        if (productData && qtyValue && addToCartBtn) {
+            const product = {
+                id: Number(productData.dataset.id),
+                name: productData.dataset.name,
+                brand: productData.dataset.brand || "",
+                price: Number(productData.dataset.price),
+                stock: Number(productData.dataset.stock)
+            };
+
+            let quantity = 1;
+
+            function updateQty() {
+                qtyValue.textContent = quantity.toLocaleString("fa-IR");
+            }
+
+            // افزایش تعداد
+            document.querySelector(".quantity-control button:last-child")
+                .addEventListener("click", () => {
+                    if (quantity < product.stock) {
+                        quantity++;
+                        updateQty();
+                    }
+                });
+
+            // کاهش تعداد
+            document.querySelector(".quantity-control button:first-child")
+                .addEventListener("click", () => {
+                    if (quantity > 1) {
+                        quantity--;
+                        updateQty();
+                    }
+                });
+
+            // افزودن محصول به سبد خرید اصلی
+            addToCartBtn.addEventListener("click", () => {
+                if (product.stock < 1) {
+                    alert("این محصول موجود نیست.");
+                    return;
+                }
+
+                let cart = [];
+
+                try {
+                    cart = JSON.parse(
+                        localStorage.getItem("homix_cart") || "[]"
+                    );
+
+                    if (!Array.isArray(cart)) cart = [];
+                } catch (error) {
+                    cart = [];
+                }
+
+                const existingProduct = cart.find(
+                    item => Number(item.id) === product.id
+                );
+
+                const oldQuantity = existingProduct
+                    ? Number(existingProduct.quantity) || 0
+                    : 0;
+
+                if (oldQuantity + quantity > product.stock) {
+                    alert("تعداد انتخابی بیشتر از موجودی انبار است.");
+                    return;
+                }
+
+                if (existingProduct) {
+                    existingProduct.quantity = oldQuantity + quantity;
+                } else {
+                    cart.push({
+                        id: product.id,
+                        name: product.name,
+                        brand: product.brand,
+                        price: product.price,
+                        quantity: quantity
+                    });
+                }
+
+                localStorage.setItem("homix_cart", JSON.stringify(cart));
+
+                // اطلاع به cart.js برای به‌روزرسانی سبد در همین صفحه
+                window.dispatchEvent(new Event("homixCartUpdated"));
+
+                addToCartBtn.textContent = "✓ به سبد خرید اضافه شد";
+
+                setTimeout(() => {
+                    addToCartBtn.textContent = "افزودن به سبد خرید";
+                }, 2000);
+            });
+
+            updateQty();
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>

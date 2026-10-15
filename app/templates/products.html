@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لیست محصولات</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Vazirmatn', sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #ffffff 100%);
+    padding: 40px 20px;
+  }
+
+  /* ===== دکمه بازگشت ===== */
+  .back-btn {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #ffffff;
+    color: #2563eb;
+    border: 2px solid #dbeafe;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    transition: all 0.25s ease;
+    z-index: 100;
+  }
+
+  .back-btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: #2563eb;
+    transition: stroke 0.25s ease;
+  }
+
+  .back-btn:hover {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+  }
+
+  .back-btn:hover svg {
+    stroke: #ffffff;
+  }
+
+  /* ===== کانتینر اصلی ===== */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ===== هدر صفحه ===== */
+  .page-header {
+    text-align: center;
+    margin-bottom: 45px;
+    margin-top: 20px;
+  }
+
+  .page-header .badge {
+    display: inline-block;
+    background: #dbeafe;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 15px;
+  }
+
+  .page-title {
+    font-size: 38px;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .page-title span {
+    background: linear-gradient(135deg, #2563eb, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .page-subtitle {
+    font-size: 15px;
+    color: #64748b;
+  }
+
+  /* ===== نوار ابزار ===== */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    background: #ffffff;
+    padding: 16px 22px;
+    border-radius: 16px;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.06);
+    flex-wrap: wrap;
+  }
+
+  .results-count {
+    font-size: 14px;
+    color: #64748b;
+  }
+
+  .results-count strong {
+    color: #2563eb;
+    font-weight: 700;
+  }
+
+  /* ===== گرید کارت‌ها ===== */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  /* ===== کارت محصول ===== */
+  .product-card {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.08),
+                0 2px 6px rgba(37, 99, 235, 0.04);
+    border: 1px solid rgba(59, 130, 246, 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15),
+                0 6px 14px rgba(37, 99, 235, 0.08);
+    border-color: rgba(59, 130, 246, 0.15);
+  }
+
+  /* ===== تصویر محصول ===== */
+  .product-image {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .product-card:hover .product-image img {
+    transform: scale(1.06);
+  }
+
+  /* پلیس‌هولدر وقتی عکسی نیست */
+  .image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+  }
+
+  .image-placeholder svg {
+    width: 44px;
+    height: 44px;
+    stroke: #94a3b8;
+    stroke-width: 1.5;
+  }
+
+  .image-placeholder span {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* برچسب دسته روی عکس */
+  .category-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15);
+  }
+
+  /* ===== محتوای کارت ===== */
+  .product-content {
+    padding: 20px 22px 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .product-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+    line-height: 1.4;
+    display: -webkit-box;
+    /* -webkit-line-clamp: 2; */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-brand {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .product-brand svg {
+    width: 14px;
+    height: 14px;
+    stroke: #94a3b8;
+  }
+
+  .product-brand strong {
+    color: #334155;
+    font-weight: 600;
+  }
+
+  /* ===== ردیف قیمت و موجودی ===== */
+  .product-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .stat-box {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid #f1f5f9;
+  }
+
+  .stat-label {
+    font-size: 11.5px;
+    color: #94a3b8;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .stat-label svg {
+    width: 13px;
+    height: 13px;
+    stroke: #94a3b8;
+    stroke-width: 2;
+  }
+
+  .stat-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .stat-value.price {
+    color: #2563eb;
+    font-size: 16px;
+  }
+
+  .stat-value.price small {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 500;
+    margin-right: 3px;
+  }
+
+  .stat-value.stock-low {
+    color: #dc2626;
+  }
+
+  .stat-value.stock-ok {
+    color: #16a34a;
+  }
+
+  /* ===== توضیحات ===== */
+  .product-description {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border-right: 3px solid #dbeafe;
+    display: -webkit-box;
+    /* -webkit-line-clamp: 3; */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+  }
+
+  /* ===== دکمه حذف ===== */
+  .delete-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ffffff;
+    color: #dc2626;
+    border: 2px solid #fecaca;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+    margin-top: auto;
+  }
+
+  .delete-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: #dc2626;
+    transition: stroke 0.25s ease;
+  }
+
+  .delete-btn:hover {
+    background: #dc2626;
+    color: #ffffff;
+    border-color: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(220, 38, 38, 0.3);
+  }
+
+  .delete-btn:hover svg {
+    stroke: #ffffff;
+  }
+
+  .delete-btn:active {
+    transform: translateY(0);
+  }
+
+  /* ===== حالت خالی ===== */
+  .empty-state {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 30px;
+    background: #ffffff;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.08);
+  }
+
+  .empty-state svg {
+    width: 80px;
+    height: 80px;
+    stroke: #cbd5e1;
+    stroke-width: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .empty-state h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 8px;
+  }
+
+  .empty-state p {
+    font-size: 14px;
+    color: #94a3b8;
+  }
+
+  /* ===== Modal تأیید حذف ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-overlay.show {
+    display: flex;
+    opacity: 1;
+  }
+
+  .modal {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 32px 28px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .modal-overlay.show .modal {
+    transform: scale(1);
+  }
+
+  .modal-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #fee2e2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  .modal-icon svg {
+    width: 30px;
+    height: 30px;
+    stroke: #dc2626;
+    stroke-width: 2;
+  }
+
+  .modal h3 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 10px;
+  }
+
+  .modal p {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.7;
+    margin-bottom: 25px;
+  }
+
+  .modal p strong {
+    color: #334155;
+    font-weight: 600;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .modal-btn {
+    flex: 1;
+    padding: 13px;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s ease;
+  }
+
+  .modal-btn-cancel {
+    background: #f1f5f9;
+    color: #64748b;
+  }
+
+  .modal-btn-cancel:hover {
+    background: #e2e8f0;
+    color: #334155;
+  }
+
+  .modal-btn-confirm {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(220, 38, 38, 0.25);
+  }
+
+  .modal-btn-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(220, 38, 38, 0.35);
+  }
+
+  /* ===== Toast پیام ===== */
+  /* .toast {
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: #ffffff;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 300;
+    transition: transform 0.4s ease;
+    opacity: 0;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  .toast svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5;
+  }
+
+  .toast.success {
+    color: #16a34a;
+    border: 2px solid #bbf7d0;
+  }
+
+  .toast.success svg {
+    stroke: #16a34a;
+  } */
+    .toast {
+        position: fixed;
+        right: 25px;
+        bottom: 25px;
+
+        background: #ffffff;
+        padding: 14px 24px;
+        border-radius: 12px;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        z-index: 300;
+
+        /* حالت اولیه: پایین صفحه */
+        transform: translateY(120px);
+        opacity: 0;
+
+        transition:
+            transform 0.4s ease,
+            opacity 0.4s ease;
+    }
+
+    .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .toast.success {
+        color: #16a34a;
+        border: 2px solid #bbf7d0;
+    }
+
+    .toast.success svg {
+        stroke: #16a34a;
+    }
+
+  /* ===== ریسپانسیو ===== */
+  @media (max-width: 640px) {
+    .back-btn {
+      top: 15px;
+      right: 15px;
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+    .page-title {
+      font-size: 28px;
+    }
+    .products-grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .toolbar {
+      padding: 14px 18px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- دکمه بازگشت -->
+  <a href="{% url 'panel' %}" class="back-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="12" x2="5" y2="12"/>
+      <polyline points="12 19 5 12 12 5"/>
+    </svg>
+    بازگشت به پنل
+  </a>
+
+  <!-- Toast -->
+  <div class="toast success" id="toast">
+    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+    <span id="toastText">محصول حذف شد!</span>
+  </div>
+
+  
+
+  <div class="container">
+
+    <!-- هدر صفحه -->
+    <div class="page-header">
+      <div class="badge">📦 مدیریت انبار</div>
+      <h1 class="page-title">لیست <span>محصولات</span></h1>
+      <p class="page-subtitle">تمام کالاهای ثبت‌شده در فروشگاه شما</p>
+    </div>
+
+    <!-- نوار ابزار -->
+    <div class="toolbar">
+      <div class="results-count">
+        تعداد کل محصولات: <strong> {{ products|length }} </strong>
+        <!--  عضو -->
+      </div>
+    </div>
+
+    <!-- گرید محصولات -->
+    <div class="products-grid">
+
+        {% for product in products %}
+
+            <div class="product-card">
+
+                <!-- تصویر -->
+                <div class="product-image">
+
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <div class="image-placeholder">
+                            بدون تصویر
+                        </div>
+                    {% endif %}
+
+                    <div class="category-badge">
+                        {{ product.category }}
+                    </div>
+
+                </div>
+
+
+                <!-- محتوا -->
+                <div class="product-content">
+
+                    <h3 class="product-name">
+                        {{ product.name }}
+                    </h3>
+
+                    <div class="product-brand">
+                        برند:
+                        <strong>{{ product.brand }}</strong>
+                    </div>
+
+
+                    <!-- قیمت و موجودی -->
+                    <div class="product-stats">
+
+                        <div class="stat-box">
+                            <div class="stat-label">
+                                قیمت
+                            </div>
+
+                            <div class="stat-value price">
+                                {{ product.price }}
+                                <small>تومان</small>
+                            </div>
+                        </div>
+
+
+                        <div class="stat-box">
+                            <div class="stat-label">
+                                موجودی
+                            </div>
+
+                            <div class="stat-value">
+                                {{ product.stock }}
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- توضیحات -->
+                    <p class="product-description">
+                        {{ product.description|default:"بدون توضیحات" }}
+                    </p>
+
+
+                    <!-- حذف -->
+                    <form action="{% url 'delete-product' product.id %}" method="POST">
+                        {% csrf_token %}
+
+                        <button type="submit" class="delete-btn">
+                            حذف محصول
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <div class="empty-state" style="display:flex;">
+                <h3>هنوز محصولی ثبت نشده</h3>
+                <p>برای شروع، از پنل مدیریت محصول جدید اضافه کنید</p>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- حالت خالی -->
+    <div class="empty-state" id="emptyState">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+        <line x1="12" y1="22.08" x2="12" y2="12"/>
+      </svg>
+      <h3>هنوز محصولی ثبت نشده</h3>
+      <p>برای شروع، از پنل مدیریت محصول جدید اضافه کنید</p>
+    </div>
+
+  </div>
+
+  <!-- Modal تأیید حذف -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>
+      </div>
+      <h3>حذف محصول</h3>
+      <p>آیا از حذف محصول <strong id="deleteProductName"></strong> مطمئن هستید؟<br>این عمل قابل بازگشت نیست.</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-cancel" onclick="closeModal()">انصراف</button>
+        <button class="modal-btn modal-btn-confirm" onclick="confirmDelete()">بله، حذف کن</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+
+    function showToast(text) {
+
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toastText');
+
+        toastText.textContent = text;
+
+        // ورود از پایین
+        toast.classList.add('show');
+
+        // بعد از ۲.۵ ثانیه خارج شود
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2500);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

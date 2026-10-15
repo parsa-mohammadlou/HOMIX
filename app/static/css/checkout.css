@@ -1,0 +1,211 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Tahoma, sans-serif;
+    background: #f4f7fc;
+    color: #1f2937;
+}
+
+a {
+    text-decoration: none;
+}
+
+.checkout-header {
+    min-height: 75px;
+    padding: 16px 6%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid #e5eaf2;
+}
+
+.logo {
+    color: #1e6bd6;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.back-link {
+    color: #1e6bd6;
+    font-size: 14px;
+}
+
+.checkout-container {
+    width: min(1100px, 92%);
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.checkout-form-section,
+.order-summary {
+    background: #fff;
+    padding: 28px;
+    border: 1px solid #e5eaf2;
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgba(30, 70, 120, 0.05);
+}
+
+h1 {
+    margin-top: 0;
+    font-size: 25px;
+}
+
+h2 {
+    font-size: 18px;
+    margin: 0 0 22px;
+}
+
+.subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.9;
+    margin-bottom: 28px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d8e0ed;
+    border-radius: 9px;
+    background: #fbfcff;
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #1e6bd6;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #1e6bd6;
+    color: #fff;
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.submit-btn:hover {
+    background: #154f9e;
+}
+
+.submit-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+.order-summary h2 {
+    padding-bottom: 18px;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.checkout-items {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.checkout-item,
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+.checkout-item span:last-child {
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.summary-row {
+    margin-top: 16px;
+    color: #596273;
+}
+
+.total-row {
+    border-top: 1px solid #e5eaf2;
+    padding-top: 20px;
+    color: #1e6bd6;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.summary-note {
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 1.9;
+    margin-top: 20px;
+}
+
+.message {
+    padding: 12px;
+    margin-bottom: 18px;
+    background: #fff4e5;
+    color: #854d0e;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+@media (max-width: 750px) {
+    .checkout-container {
+        grid-template-columns: 1fr;
+        margin: 24px auto;
+    }
+
+    .checkout-form-section,
+    .order-summary {
+        padding: 20px;
+    }
+
+    .checkout-header {
+        padding: 16px 4%;
+        flex-wrap: wrap;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}

@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدیریت مشتری‌ها</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Vazirmatn', sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #ffffff 100%);
+    background-attachment: fixed;
+    color: #1e293b;
+    padding-bottom: 90px;
+  }
+
+  /* ==================== هدر ==================== */
+  .header {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-logo {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.25);
+  }
+
+  .brand-logo svg {
+    width: 22px;
+    height: 22px;
+    stroke: #ffffff;
+  }
+
+  .brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .brand-sub {
+    font-size: 12px;
+    color: #64748b;
+  }
+
+  /* دکمه خروج */
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 14px;
+    border-radius: 10px;
+    background: #fff1f1;
+    color: #d93025;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .logout-btn:hover {
+    background: #ffe1e1;
+  }
+
+  .logout-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: #d93025;
+  }
+
+  /* ==================== محتوا ==================== */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+
+  /* عنوان صفحه */
+  .page-header {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 26px 30px;
+    box-shadow: 0 20px 50px rgba(37, 99, 235, 0.10),
+                0 4px 12px rgba(37, 99, 235, 0.05);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+  }
+
+  .page-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .page-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+  }
+
+  .page-desc {
+    font-size: 13.5px;
+    color: #64748b;
+  }
+
+  .customer-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  .customer-count svg {
+    width: 18px;
+    height: 18px;
+    stroke: #2563eb;
+  }
+
+  /* نوار جستجو و فیلتر */
+  .toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 240px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-box svg {
+    position: absolute;
+    right: 16px;
+    width: 18px;
+    height: 18px;
+    stroke: #94a3b8;
+    pointer-events: none;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 13px 46px 13px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1e293b;
+    background: #ffffff;
+    transition: all 0.25s ease;
+    outline: none;
+  }
+
+  .search-box input::placeholder {
+    color: #94a3b8;
+  }
+
+  .search-box input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 6px;
+    background: #ffffff;
+    padding: 5px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
+  }
+
+  .filter-buttons button {
+    padding: 9px 16px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .filter-buttons button:hover {
+    color: #2563eb;
+  }
+
+  .filter-buttons button.active {
+    background: #eff6ff;
+    color: #2563eb;
+  }
+
+  /* ==================== لیست مشتری‌ها ==================== */
+  .customers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .customer-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 18px 22px;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .customer-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(37, 99, 235, 0.15);
+  }
+
+  .customer-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .customer-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.25);
+  }
+
+  .customer-details {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .customer-name {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+  }
+
+  .customer-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    color: #64748b;
+  }
+
+  .customer-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .customer-meta-item svg {
+    width: 14px;
+    height: 14px;
+    stroke: #94a3b8;
+  }
+
+  /* بخش چپ کارت */
+  .customer-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
+  .status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .status.active {
+    background: #f0fdf4;
+    color: #16a34a;
+  }
+
+  .status.inactive {
+    background: #fff1f1;
+    color: #d93025;
+  }
+
+  .action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .action-btn svg {
+    width: 17px;
+    height: 17px;
+    stroke: #64748b;
+    transition: stroke 0.2s;
+  }
+
+  .action-btn:hover {
+    background: #eff6ff;
+  }
+
+  .action-btn:hover svg {
+    stroke: #2563eb;
+  }
+
+  /* ==================== صفحه‌بندی ==================== */
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 24px;
+  }
+
+  .pagination a,
+  .pagination span {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #64748b;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+    transition: all 0.2s;
+    padding: 0 12px;
+  }
+
+  .pagination a:hover {
+    background: #eff6ff;
+    color: #2563eb;
+  }
+
+  .pagination .active {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  }
+
+  .pagination .disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ==================== منوی موبایل ==================== */
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 -4px 20px rgba(37, 99, 235, 0.08);
+    z-index: 200;
+    padding: 8px 0;
+  }
+
+  .mobile-nav-inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .mobile-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 12px;
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 500;
+    transition: color 0.2s;
+    border-radius: 10px;
+  }
+
+  .mobile-nav a svg {
+    width: 22px;
+    height: 22px;
+    stroke: #94a3b8;
+    transition: stroke 0.2s;
+  }
+
+  .mobile-nav a.active,
+  .mobile-nav a:hover {
+    color: #2563eb;
+  }
+
+  .mobile-nav a.active svg,
+  .mobile-nav a:hover svg {
+    stroke: #2563eb;
+  }
+
+  .mobile-nav a.logout-mobile:hover {
+    color: #d93025;
+  }
+
+  .mobile-nav a.logout-mobile:hover svg {
+    stroke: #d93025;
+  }
+
+  /* ==================== ریسپانسیو ==================== */
+  @media (max-width: 768px) {
+    .brand-sub {
+      display: none;
+    }
+
+    .mobile-nav {
+      display: block;
+    }
+
+    .page-header {
+      padding: 22px;
+    }
+
+    .page-title {
+      font-size: 18px;
+    }
+
+    .container {
+      padding: 20px 16px;
+    }
+
+    .filter-buttons {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .filter-buttons button {
+      flex: 1;
+      padding: 9px 8px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .customer-card {
+      padding: 16px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .customer-info {
+      width: 100%;
+    }
+
+    .customer-actions {
+      width: 100%;
+      justify-content: space-between;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .customer-meta {
+      gap: 10px;
+    }
+
+    .customer-meta-item span {
+      display: none;
+    }
+
+    .pagination a,
+    .pagination span {
+      min-width: 36px;
+      height: 36px;
+      font-size: 12.5px;
+    }
+
+    .customer-count {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ==================== هدر ==================== -->
+  <header class="header">
+    <div class="header-inner">
+      
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">فروشگاه من</div>
+          <div class="brand-sub">پنل مدیریت</div>
+        </div>
+      </div>
+
+      <a href="{% url 'panel' %}" class="logout-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        خروج
+      </a>
+
+    </div>
+  </header>
+
+  <!-- ==================== محتوا ==================== -->
+  <main class="container">
+
+    <!-- عنوان صفحه -->
+    <section class="page-header">
+      <div class="page-header-content">
+        <div>
+          <h1 class="page-title">مدیریت مشتری‌ها</h1>
+          <p class="page-desc">لیست تمام مشتریان فروشگاه</p>
+        </div>
+        <div class="customer-count">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          {{ customers|length }} مشتری
+        </div>
+      </div>
+    </section>
+
+    <!-- نوار جستجو و فیلتر -->
+    <div class="toolbar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" placeholder="جستجوی نام، ایمیل یا شماره تماس...">
+      </div>
+      <div class="filter-buttons">
+        <button class="active">همه</button>
+        <button>فعال</button>
+        <button>غیرفعال</button>
+      </div>
+    </div>
+
+    <!-- لیست مشتری‌ها -->
+    <section class="customers-list">
+        {% for customer in customers %}
+            <div class="customer-card">
+                <div class="customer-info">
+                <div class="customer-avatar">{{ customer.username|slice:":1" }}</div>
+                <div class="customer-details">
+                    <div class="customer-name">{{ customer.username }}</div>
+                    <div class="customer-meta">
+                    <div class="customer-meta-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                        <span>{{ customer.email }}</span>
+                    </div>
+                    <div class="customer-meta-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        <span>{{ customer.phone }}</span>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="customer-actions">
+            <span class="status active">فعال</span>
+            <a href="#" class="action-btn" title="مشاهده">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </a>
+            </div>
+        </div>
+        {% endfor %}
+
+      <!-- مشتری ۱ -->
+      <!-- <div class="customer-card">
+        <div class="customer-info">
+          <div class="customer-avatar">ع</div>
+          <div class="customer-details">
+            <div class="customer-name">علی محمدی</div>
+            <div class="customer-meta">
+              <div class="customer-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+                <span>ali@example.com</span>
+              </div>
+              <div class="customer-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span>۰۹۱۲۳۴۵۶۷۸۹</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="customer-actions">
+          <span class="status active">فعال</span>
+          <a href="#" class="action-btn" title="مشاهده">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </a>
+        </div>
+      </div> -->
+
+      <!-- مشتری ۲ -->
+      <!-- <div class="customer-card">
+        <div class="customer-info">
+          <div class="customer-avatar">ز</div>
+          <div class="customer-details">
+            <div class="customer-name">زهرا احمدی</div>
+            <div class="customer-meta">
+              <div class="customer-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+                <span>zahra@example.com</span>
+              </div>
+              <div class="customer-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span>۰۹۳۵۶۷۸۹۰۱۲</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="customer-actions">
+          <span class="status active">فعال</span>
+          <a href="#" class="action-btn" title="مشاهده">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </a>
+        </div>
+      </div> -->
+
+      <!-- مشتری ۳ -->
+      <!-- <div class="customer-card">
+        <div class="customer-info">
+          <div class="customer-avatar">ر</div>
+          <div class="customer-details">
+            <div class="customer-name">رضا کریمی</div>
+            <div class="customer-meta">
+              <div class="customer-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+                <span>reza@example.com</span>
+              </div>
+              <div class="customer-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span>۰۹۱۹۸۷۶۵۴۳۲</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="customer-actions">
+          <span class="status inactive">غیرفعال</span>
+          <a href="#" class="action-btn" title="مشاهده">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </a>
+        </div>
+      </div> -->
+
+      <!-- مشتری ۴ -->
+      <!-- <div class="customer-card">
+        <div class="customer-info">
+          <div class="customer-avatar">م</div>
+          <div class="customer-details">
+            <div class="customer-name">مریم رضایی</div>
+            <div class="customer-meta">
+              <div class="customer-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+                <span>maryam@example.com</span>
+              </div>
+              <div class="customer-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span>۰۹۱۲۱۱۱۲۲۳۳</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="customer-actions">
+          <span class="status active">فعال</span>
+          <a href="#" class="action-btn" title="مشاهده">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </a>
+        </div>
+      </div> -->
+
+      <!-- مشتری ۵ -->
+      <!-- <div class="customer-card">
+        <div class="customer-info">
+          <div class="customer-avatar">ح</div>
+          <div class="customer-details">
+            <div class="customer-name">حسین نوری</div>
+            <div class="customer-meta">
+              <div class="customer-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+                <span>hossein@example.com</span>
+              </div>
+              <div class="customer-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span>۰۹۳۳۴۴۵۵۶۶۷</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="customer-actions">
+          <span class="status active">فعال</span>
+          <a href="#" class="action-btn" title="مشاهده">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </a>
+        </div>
+      </div> -->
+
+    </section>
+
+    <!-- صفحه‌بندی -->
+    <nav class="pagination">
+      <a href="#" class="disabled">قبلی</a>
+      <span class="active">۱</span>
+      <a href="#">۲</a>
+      <a href="#">۳</a>
+      <a href="#">...</a>
+      <a href="#">۱۲</a>
+      <a href="#">بعدی</a>
+    </nav>
+
+  </main>
+
+  <!-- ==================== منوی موبایل ==================== -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-inner">
+      
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        داشبورد
+      </a>
+
+      <a href="#" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        مشتری‌ها
+      </a>
+
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        پروفایل
+      </a>
+
+      <a href="#" class="logout-mobile">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        خروج
+      </a>
+
+    </div>
+  </nav>
+
+</body>
+</html>

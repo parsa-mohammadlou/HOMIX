@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پنل کاربری</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Vazirmatn', sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #ffffff 100%);
+    background-attachment: fixed;
+    color: #1e293b;
+    padding-bottom: 90px;
+  }
+
+  /* ==================== هدر ==================== */
+  .header {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-logo {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.25);
+  }
+
+  .brand-logo svg {
+    width: 22px;
+    height: 22px;
+    stroke: #ffffff;
+  }
+
+  .brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .brand-sub {
+    font-size: 12px;
+    color: #64748b;
+  }
+
+  /* دکمه خروج */
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 14px;
+    border-radius: 10px;
+    background: #fff1f1;
+    color: #d93025;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .logout-btn:hover {
+    background: #ffe1e1;
+  }
+
+  .logout-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: #d93025;
+  }
+
+  /* ==================== محتوا ==================== */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+
+  /* کارت خوش‌آمدگویی */
+  .welcome-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba(37, 99, 235, 0.10),
+                0 4px 12px rgba(37, 99, 235, 0.05);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .welcome-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+  }
+
+  .welcome-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .welcome-text h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+  }
+
+  .welcome-text p {
+    font-size: 14px;
+    color: #64748b;
+  }
+
+  .welcome-avatar {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+    flex-shrink: 0;
+  }
+
+  .welcome-avatar svg {
+    width: 32px;
+    height: 32px;
+    stroke: #ffffff;
+  }
+
+  /* عنوان بخش */
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .section-title a {
+    font-size: 13px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .section-title a:hover {
+    text-decoration: underline;
+  }
+
+  /* دسترسی سریع */
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .quick-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 22px 16px;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    text-align: center;
+    position: relative;
+  }
+
+  .quick-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(37, 99, 235, 0.15);
+  }
+
+  .quick-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quick-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: #2563eb;
+  }
+
+  .quick-card span {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #334155;
+  }
+
+  /* نشانگر تعداد سبد خرید */
+  .cart-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+  }
+
+  /* لیست سفارش‌ها */
+  .orders-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(37, 99, 235, 0.10),
+                0 4px 12px rgba(37, 99, 235, 0.05);
+  }
+
+  .order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-radius: 12px;
+    transition: background 0.2s;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .order-item:not(:last-child) {
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .order-item:hover {
+    background: #f8fafc;
+  }
+
+  .order-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .order-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #eff6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .order-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: #2563eb;
+  }
+
+  .order-details .order-id {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+  }
+
+  .order-details .order-date {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+
+  .order-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  /* وضعیت سفارش */
+  .status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .status.delivered {
+    background: #f0fdf4;
+    color: #16a34a;
+  }
+
+  .status.pending {
+    background: #fffbeb;
+    color: #d97706;
+  }
+
+  .status.canceled {
+    background: #fff1f1;
+    color: #d93025;
+  }
+
+  /* ==================== منوی موبایل ==================== */
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 -4px 20px rgba(37, 99, 235, 0.08);
+    z-index: 200;
+    padding: 8px 0;
+  }
+
+  .mobile-nav-inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .mobile-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 12px;
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 500;
+    transition: color 0.2s;
+    border-radius: 10px;
+    position: relative;
+  }
+
+  .mobile-nav a svg {
+    width: 22px;
+    height: 22px;
+    stroke: #94a3b8;
+    transition: stroke 0.2s;
+  }
+
+  .mobile-nav a.active,
+  .mobile-nav a:hover {
+    color: #2563eb;
+  }
+
+  .mobile-nav a.active svg,
+  .mobile-nav a:hover svg {
+    stroke: #2563eb;
+  }
+
+  /* نشانگر سبد خرید در منوی موبایل */
+  .mobile-cart-badge {
+    position: absolute;
+    top: 0;
+    left: 8px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* حالت خاص برای خروج در موبایل */
+  .mobile-nav a.logout-mobile:hover {
+    color: #d93025;
+  }
+
+  .mobile-nav a.logout-mobile:hover svg {
+    stroke: #d93025;
+  }
+
+  /* ==================== ریسپانسیو ==================== */
+  @media (max-width: 900px) {
+    .quick-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .brand-sub {
+      display: none;
+    }
+
+    .mobile-nav {
+      display: block;
+    }
+
+    .welcome-card {
+      padding: 24px;
+    }
+
+    .welcome-text h1 {
+      font-size: 19px;
+    }
+
+    .container {
+      padding: 20px 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .quick-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .quick-card {
+      padding: 18px 12px;
+    }
+
+    .quick-icon {
+      width: 42px;
+      height: 42px;
+    }
+
+    .quick-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .quick-card span {
+      font-size: 12.5px;
+    }
+
+    .order-item {
+      padding: 14px 8px;
+    }
+
+    .order-price {
+      font-size: 13px;
+    }
+
+    .welcome-avatar {
+      width: 56px;
+      height: 56px;
+    }
+
+    .welcome-avatar svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ==================== هدر ==================== -->
+  <header class="header">
+    <div class="header-inner">
+      
+      <!-- برند -->
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">فروشگاه من</div>
+          <div class="brand-sub">پنل کاربری</div>
+        </div>
+      </div>
+
+      <!-- خروج -->
+      <a href="{% url 'logoutuser'%}" class="logout-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        خروج
+      </a>
+
+    </div>
+  </header>
+
+  <!-- ==================== محتوا ==================== -->
+  <main class="container">
+
+    <!-- کارت خوش‌آمدگویی -->
+    <section class="welcome-card">
+      <div class="welcome-content">
+        <div class="welcome-text">
+          <h1>سلام، {{customer.username}}👋</h1>
+          <p>خوش آمدید! از پنل کاربری خود لذت ببرید.</p>
+        </div>
+        <div class="welcome-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- دسترسی سریع -->
+    <h2 class="section-title">دسترسی سریع</h2>
+    <section class="quick-grid">
+      <a href="{% url 'my_orders' %}" class="quick-card">
+        <div class="quick-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </div>
+        <span>سفارش‌های من</span>
+      </a>
+
+      <!-- سبد خرید (جایگزین پروفایل) -->
+      <a href="{% url 'cart' %}" class="quick-card">
+        <div class="cart-badge">{{ cart_count|default:0 }}</div>
+        <div class="quick-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+        </div>
+        <span>سبد خرید</span>
+      </a>
+
+      <a href="#" class="quick-card">
+        <div class="quick-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <span>آدرس‌ها</span>
+      </a>
+
+      <a href="#" class="quick-card">
+        <div class="quick-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          </svg>
+        </div>
+        <span>علاقه‌مندی‌ها</span>
+      </a>
+    </section>
+
+    <!-- آخرین سفارش‌ها -->
+    <h2 class="section-title">
+      آخرین سفارش‌ها
+      <a href="#">مشاهده همه</a>
+    </h2>
+    <section class="orders-card">
+      
+      <div class="order-item">
+        <div class="order-info">
+          <div class="order-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </div>
+          <div class="order-details">
+            <div class="order-id">سفارش #۱۰۲۴</div>
+            <div class="order-date">۱۴۰۳/۰۸/۱۵</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="order-price">۸۵۰,۰۰۰ تومان</span>
+          <span class="status delivered">تحویل شده</span>
+        </div>
+      </div>
+
+      <div class="order-item">
+        <div class="order-info">
+          <div class="order-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </div>
+          <div class="order-details">
+            <div class="order-id">سفارش #۱۰۲۳</div>
+            <div class="order-date">۱۴۰۳/۰۸/۱۲</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="order-price">۱,۲۰۰,۰۰۰ تومان</span>
+          <span class="status pending">در حال ارسال</span>
+        </div>
+      </div>
+
+      <div class="order-item">
+        <div class="order-info">
+          <div class="order-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </div>
+          <div class="order-details">
+            <div class="order-id">سفارش #۱۰۲۲</div>
+            <div class="order-date">۱۴۰۳/۰۸/۰۵</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="order-price">۴۵۰,۰۰۰ تومان</span>
+          <span class="status canceled">لغو شده</span>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==================== منوی موبایل ==================== -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-inner">
+      
+      <a href="#" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        داشبورد
+      </a>
+
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        سفارش‌ها
+      </a>
+
+      <!-- سبد خرید (جایگزین پروفایل) -->
+      <a href="#">
+        <span class="mobile-cart-badge">{{ cart_count|default:0 }}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        سبد خرید
+      </a>
+
+      <a href="{% url 'logoutuser'%}" class="logout-mobile">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        خروج
+      </a>
+
+    </div>
+  </nav>
+
+</body>
+</html>

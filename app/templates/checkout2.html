@@ -1,0 +1,657 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>تسویه حساب | HOMIX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #ffffff 100%);
+            background-attachment: fixed;
+            color: #1e293b;
+            padding-bottom: 40px;
+        }
+
+        /* ==================== هدر ==================== */
+        .checkout-header {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .checkout-header .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .checkout-header span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 14px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            background: #dbeafe;
+        }
+
+        .back-link::before {
+            content: '→';
+            font-size: 15px;
+        }
+
+        /* ==================== محتوا ==================== */
+        .checkout-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        /* ==================== فرم ==================== */
+        .checkout-form-section {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.10),
+                        0 4px 12px rgba(37, 99, 235, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkout-form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+        }
+
+        .checkout-form-section h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+
+        .checkout-form-section .subtitle {
+            font-size: 13.5px;
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+
+        .checkout-form-section h2 {
+            font-size: 15.5px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkout-form-section h2::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            border-radius: 2px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+        }
+
+        /* پیام‌ها */
+        .message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        /* گروه فرم */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #1e293b;
+            background: #f8fafc;
+            transition: all 0.25s ease;
+            outline: none;
+            resize: vertical;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-group input:hover,
+        .form-group textarea:hover {
+            border-color: #cbd5e1;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #3b82f6;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        }
+
+        .form-group textarea {
+            min-height: 110px;
+            line-height: 1.7;
+        }
+
+        /* دکمه ارسال */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.35);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .submit-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* ==================== خلاصه سفارش ==================== */
+        .order-summary {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 26px;
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.10),
+                        0 4px 12px rgba(37, 99, 235, 0.05);
+            position: sticky;
+            top: 90px;
+            overflow: hidden;
+        }
+
+        .order-summary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+        }
+
+        .order-summary h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .order-summary h2::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            border-radius: 2px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+        }
+
+        /* لیست اقلام */
+        .checkout-items {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .checkout-items > p {
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: center;
+            padding: 12px 0;
+        }
+
+        .checkout-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .checkout-item:hover {
+            background: #f8fafc;
+        }
+
+        .checkout-item span:first-child {
+            color: #334155;
+            font-weight: 500;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .checkout-item span:last-child {
+            color: #1e293b;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* ردیف‌های خلاصه */
+        .summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 0;
+            font-size: 13.5px;
+        }
+
+        .summary-row span:first-child {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .summary-row span:last-child {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .summary-row.total-row {
+            margin-top: 8px;
+            padding-top: 16px;
+            border-top: 2px solid #f1f5f9;
+        }
+
+        .summary-row.total-row span:first-child {
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 14.5px;
+        }
+
+        .summary-row.total-row span:last-child {
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .summary-note {
+            margin-top: 14px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 12px;
+            line-height: 1.7;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* ==================== ریسپانسیو ==================== */
+        @media (max-width: 900px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .checkout-header {
+                padding: 14px 16px;
+            }
+
+            .checkout-header span {
+                display: none;
+            }
+
+            .checkout-container {
+                padding: 20px 16px;
+                gap: 18px;
+            }
+
+            .checkout-form-section {
+                padding: 24px 20px;
+            }
+
+            .checkout-form-section h1 {
+                font-size: 19px;
+            }
+
+            .order-summary {
+                padding: 22px 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .back-link {
+                padding: 8px 12px;
+                font-size: 12.5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="checkout-header">
+    <a href="{% url 'home' %}" class="logo">HOMIX</a>
+    <span>تکمیل سفارش</span>
+    <a href="{% url 'cart' %}" class="back-link">بازگشت به سبد خرید</a>
+</header>
+
+<main class="checkout-container">
+
+    <section class="checkout-form-section">
+
+        <h1>تسویه حساب</h1>
+        <p class="subtitle">برای نهایی کردن خرید، اطلاعات زیر را وارد کنید.</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" id="checkoutForm">
+            {% csrf_token %}
+
+            <h2>اطلاعات گیرنده</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first_name">نام</label>
+                    <input
+                        type="text"
+                        id="first_name"
+                        name="first_name"
+                        autocomplete="given-name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name">نام خانوادگی</label>
+                    <input
+                        type="text"
+                        id="last_name"
+                        name="last_name"
+                        autocomplete="family-name"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">شماره موبایل</label>
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    autocomplete="tel"
+                    placeholder="مثلاً 09123456789"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="address">آدرس کامل تحویل سفارش</label>
+                <textarea
+                    id="address"
+                    name="address"
+                    rows="4"
+                    autocomplete="street-address"
+                    placeholder="استان، شهر، خیابان، کوچه و پلاک"
+                    required
+                ></textarea>
+            </div>
+
+            <input type="hidden" name="cart_data" id="cartData">
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                ثبت سفارش
+            </button>
+        </form>
+
+    </section>
+
+    <aside class="order-summary">
+
+        <h2>خلاصه سفارش</h2>
+
+        <div id="checkoutItems" class="checkout-items">
+            <p>در حال بارگذاری سبد خرید...</p>
+        </div>
+
+        <div class="summary-row">
+            <span>تعداد محصولات</span>
+            <span id="itemCount">۰</span>
+        </div>
+
+        <div class="summary-row">
+            <span>جمع محصولات</span>
+            <span id="subtotal">۰ تومان</span>
+        </div>
+
+        <div class="summary-row">
+            <span>هزینه ارسال</span>
+            <span id="shippingCost">۵۰٬۰۰۰ تومان</span>
+        </div>
+
+        <div class="summary-row total-row">
+            <span>مبلغ قابل پرداخت</span>
+            <span id="grandTotal">۰ تومان</span>
+        </div>
+
+        <p class="summary-note">
+            مبلغ نهایی سفارش در سمت سرور محاسبه و ثبت می‌شود.
+        </p>
+
+    </aside>
+
+</main>
+
+<script>
+    const STORAGE_KEY = "homix_cart";
+    const SHIPPING_COST = 50000;
+
+    const form = document.getElementById("checkoutForm");
+    const cartDataInput = document.getElementById("cartData");
+    const submitBtn = document.getElementById("submitBtn");
+
+    const checkoutItems = document.getElementById("checkoutItems");
+    const itemCount = document.getElementById("itemCount");
+    const subtotalElement = document.getElementById("subtotal");
+    const shippingElement = document.getElementById("shippingCost");
+    const grandTotalElement = document.getElementById("grandTotal");
+
+    const formatPrice = (price) =>
+        Number(price).toLocaleString("fa-IR") + " تومان";
+
+    function getCart() {
+        try {
+            const cart = JSON.parse(
+                localStorage.getItem(STORAGE_KEY) || "[]"
+            );
+
+            return Array.isArray(cart) ? cart : [];
+        } catch {
+            return [];
+        }
+    }
+
+    function renderCheckout() {
+        const cart = getCart();
+
+        checkoutItems.replaceChildren();
+
+        let subtotal = 0;
+        let count = 0;
+
+        cart.forEach(item => {
+            const quantity = Number(item.quantity);
+            const price = Number(item.price);
+
+            if (
+                !Number.isInteger(quantity) ||
+                quantity <= 0 ||
+                !Number.isFinite(price) ||
+                price < 0
+            ) {
+                return;
+            }
+
+            subtotal += price * quantity;
+            count += quantity;
+
+            const row = document.createElement("div");
+            row.className = "checkout-item";
+
+            const name = document.createElement("span");
+            name.textContent = `${item.name} × ${quantity}`;
+
+            const priceElement = document.createElement("span");
+            priceElement.textContent = formatPrice(price * quantity);
+
+            row.append(name, priceElement);
+            checkoutItems.appendChild(row);
+        });
+
+        itemCount.textContent = count.toLocaleString("fa-IR");
+        subtotalElement.textContent = formatPrice(subtotal);
+        shippingElement.textContent = formatPrice(SHIPPING_COST);
+
+        const total = count > 0 ? subtotal + SHIPPING_COST : 0;
+        grandTotalElement.textContent = formatPrice(total);
+
+        if (count === 0) {
+            const emptyMessage = document.createElement("p");
+            emptyMessage.textContent = "سبد خرید شما خالی است.";
+            checkoutItems.appendChild(emptyMessage);
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "سبد خرید خالی است";
+        } else {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "ثبت سفارش";
+        }
+    }
+
+    form.addEventListener("submit", function(event) {
+        const cart = getCart();
+
+        if (cart.length === 0) {
+            event.preventDefault();
+            alert("سبد خرید شما خالی است.");
+            return;
+        }
+
+        cartDataInput.value = JSON.stringify(cart);
+    });
+
+    renderCheckout();
+</script>
+
+</body>
+</html>

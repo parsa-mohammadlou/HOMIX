@@ -1,0 +1,212 @@
+/* ============ HEADER ============ */
+header {
+    background: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .05);
+}
+
+.header-inner{
+  display:flex;
+  align-items:center;
+  gap:28px;
+  padding:22px 20px;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.logo span {
+    color: var(--text)
+}
+
+nav.main-nav {
+    display: flex;
+    gap: 24px;
+    font-size: 15px;
+    font-weight: 500
+}
+
+nav.main-nav a {
+    color: var(--text);
+    padding: 6px 2px;
+    position: relative;
+    transition: .2s;
+}
+
+nav.main-nav a:hover,
+nav.main-nav a.active {
+    color: var(--primary)
+}
+
+nav.main-nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.search-box {
+    flex: 1;
+    max-width: 340px;
+    margin-inline-start: auto;
+    position: relative;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 11px 44px 11px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 50px;
+    background: var(--bg);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: .2s;
+}
+
+.search-box input:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.search-box svg {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    fill: var(--muted);
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px
+}
+
+.icon-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    transition: .2s;
+    position: relative;
+    cursor: pointer;
+}
+
+.icon-btn:hover {
+    background: var(--primary-light)
+}
+
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--text);
+    transition: .2s
+}
+
+.icon-btn:hover svg {
+    fill: var(--primary)
+}
+
+.icon-btn .badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-link {
+    position: relative;
+
+    padding: 8px 0;
+
+    color: var(--text);
+
+    text-decoration: none;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    transition: color 0.25s ease;
+}
+
+
+/* خط آبی زیر لینک */
+
+.nav-link::after {
+    content: "";
+
+    position: absolute;
+
+    right: 0;
+    bottom: 0;
+
+    width: 0;
+    height: 2px;
+
+    background: var(--primary);
+
+    border-radius: 10px;
+
+    transition: width 0.25s ease;
+}
+
+
+/* لینک فعال */
+
+.nav-link.active {
+    color: var(--primary);
+
+    font-weight: 700;
+}
+
+.nav-link.active::after {
+    width: 100%;
+}
+
+
+/* Hover */
+
+.nav-link:hover {
+    color: var(--primary);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+html {
+    scroll-behavior: smooth;
+}

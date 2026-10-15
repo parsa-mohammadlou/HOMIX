@@ -1,0 +1,743 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>مدیریت سفارش‌ها | HOMIX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/panel-orders.css' %}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #ffffff 100%);
+            background-attachment: fixed;
+            color: #1e293b;
+            padding-bottom: 40px;
+        }
+
+        /* ==================== هدر ==================== */
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .topbar .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .topbar span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 14px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            background: #dbeafe;
+        }
+
+        .back-link::before {
+            content: '→';
+            font-size: 15px;
+        }
+
+        /* ==================== محتوا ==================== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* عنوان صفحه */
+        .page-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 28px;
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.10),
+                        0 4px 12px rgba(37, 99, 235, 0.05);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .page-heading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+        }
+
+        .page-heading h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .page-heading p {
+            font-size: 13.5px;
+            color: #64748b;
+        }
+
+        .count {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 18px;
+            border-radius: 12px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 13.5px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* پیام‌ها */
+        .message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        /* ==================== لیست سفارش‌ها ==================== */
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .order-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 26px;
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.10),
+                        0 4px 12px rgba(37, 99, 235, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .order-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+        }
+
+        .order-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 55px rgba(37, 99, 235, 0.15);
+        }
+
+        /* هدر کارت */
+        .order-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+        }
+
+        .order-header .muted {
+            display: block;
+            font-size: 11.5px;
+            color: #94a3b8;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .order-header h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* وضعیت سفارش */
+        .status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .status-processing {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .status-shipped {
+            background: #f0f9ff;
+            color: #0284c7;
+        }
+
+        .status-delivered {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        .status-canceled {
+            background: #fff1f1;
+            color: #d93025;
+        }
+
+        .status:not([class*="status-"]) {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* ==================== اطلاعات ==================== */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .info-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .info-item span {
+            font-size: 11.5px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .info-item strong {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #1e293b;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .info-item.full-width strong {
+            white-space: normal;
+            line-height: 1.7;
+        }
+
+        /* ==================== محصولات ==================== */
+        .products-section {
+            padding-top: 16px;
+            margin-bottom: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .products-section h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .products-section h3::before {
+            content: '';
+            width: 3px;
+            height: 14px;
+            border-radius: 2px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+        }
+
+        .product-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .product-row:hover {
+            background: #f8fafc;
+        }
+
+        .product-row span:first-child {
+            color: #334155;
+            font-weight: 500;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .product-row span:last-child {
+            color: #64748b;
+            font-weight: 600;
+            font-size: 12.5px;
+            flex-shrink: 0;
+        }
+
+        /* ==================== فوتر کارت ==================== */
+        .order-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-top: 18px;
+            border-top: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+        }
+
+        .total {
+            font-size: 13.5px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .total strong {
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 15px;
+            margin-right: 4px;
+        }
+
+        /* فرم تغییر وضعیت */
+        .status-form {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .status-form label {
+            font-size: 12.5px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .status-form select {
+            padding: 9px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+            min-width: 130px;
+        }
+
+        .status-form select:hover {
+            border-color: #cbd5e1;
+        }
+
+        .status-form select:focus {
+            border-color: #3b82f6;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+        }
+
+        .status-form button {
+            padding: 9px 18px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.25);
+        }
+
+        .status-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+        }
+
+        .status-form button:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        /* ==================== حالت خالی ==================== */
+        .empty-state {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 60px 30px;
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.10),
+                        0 4px 12px rgba(37, 99, 235, 0.05);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .empty-state::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+        }
+
+        .empty-state::after {
+            content: '📦';
+            display: block;
+            font-size: 52px;
+            margin-bottom: 18px;
+            line-height: 1;
+        }
+
+        .empty-state h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.8;
+        }
+
+        /* ==================== ریسپانسیو ==================== */
+        @media (max-width: 900px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .topbar {
+                padding: 14px 16px;
+            }
+
+            .topbar span {
+                display: none;
+            }
+
+            .container {
+                padding: 20px 16px;
+            }
+
+            .page-heading {
+                padding: 20px 22px;
+            }
+
+            .page-heading h1 {
+                font-size: 18px;
+            }
+
+            .count {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .order-card {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .order-header h2 {
+                font-size: 15px;
+            }
+
+            .status {
+                padding: 5px 12px;
+                font-size: 11.5px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .info-item {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 14px;
+            }
+
+            .info-item.full-width {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+            .info-item.full-width strong {
+                text-align: right;
+            }
+
+            .product-row {
+                padding: 9px 10px;
+                font-size: 12.5px;
+            }
+
+            .order-footer {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .total {
+                text-align: center;
+                padding: 10px;
+                background: #f8fafc;
+                border-radius: 10px;
+            }
+
+            .status-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .status-form label {
+                text-align: center;
+            }
+
+            .status-form select,
+            .status-form button {
+                width: 100%;
+            }
+
+            .empty-state {
+                padding: 45px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <a href="{% url 'panel' %}" class="logo">HOMIX</a>
+    <span>مدیریت سفارش‌ها</span>
+    <a href="{% url 'panel' %}" class="back-link">بازگشت به پنل</a>
+</header>
+
+<main class="container">
+
+    <div class="page-heading">
+        <div>
+            <h1>سفارش‌های مشتریان</h1>
+            <p>مشاهده اطلاعات و مدیریت وضعیت سفارش‌ها</p>
+        </div>
+
+        <span class="count">
+            تعداد سفارش‌ها: {{ orders|length }}
+        </span>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if orders %}
+
+        <div class="orders-list">
+
+            {% for order in orders %}
+
+                <section class="order-card">
+
+                    <div class="order-header">
+                        <div>
+                            <span class="muted">شماره سفارش</span>
+                            <h2>#{{ order.id }}</h2>
+                        </div>
+
+                        <span class="status status-{{ order.status }}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </div>
+
+                    <div class="info-grid">
+
+                        <div class="info-item">
+                            <span>نام گیرنده</span>
+                            <strong>
+                                {{ order.first_name }} {{ order.last_name }}
+                            </strong>
+                        </div>
+
+                        <div class="info-item">
+                            <span>نام کاربری مشتری</span>
+                            <strong>{{ order.user.username }}</strong>
+                        </div>
+
+                        <div class="info-item">
+                            <span>شماره تماس</span>
+                            <strong>{{ order.phone }}</strong>
+                        </div>
+
+                        <div class="info-item">
+                            <span>تاریخ سفارش</span>
+                            <strong>
+                                {{ order.created_at|date:"Y/m/d - H:i" }}
+                            </strong>
+                        </div>
+
+                        <div class="info-item full-width">
+                            <span>آدرس تحویل</span>
+                            <strong>{{ order.address }}</strong>
+                        </div>
+
+                    </div>
+
+                    <div class="products-section">
+                        <h3>محصولات سفارش</h3>
+
+                        {% for item in order.items.all %}
+                            <div class="product-row">
+                                <span>{{ item.product.name }}</span>
+
+                                <span>
+                                    {{ item.quantity }} عدد ×
+                                    {{ item.price }} تومان
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="order-footer">
+
+                        <div class="total">
+                            مبلغ نهایی:
+                            <strong>{{ order.total_price }} تومان</strong>
+                        </div>
+
+                        <form
+                            method="post"
+                            action="{% url 'update_order_status' order.id %}"
+                            class="status-form"
+                        >
+                            {% csrf_token %}
+
+                            <label for="status-{{ order.id }}">
+                                تغییر وضعیت:
+                            </label>
+
+                            <select
+                                name="status"
+                                id="status-{{ order.id }}"
+                                required
+                            >
+                                {% for value, label in status_choices %}
+                                    <option
+                                        value="{{ value }}"
+                                        {% if order.status == value %}selected{% endif %}
+                                    >
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            <button type="submit">
+                                ذخیره وضعیت
+                            </button>
+                        </form>
+
+                    </div>
+
+                </section>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <section class="empty-state">
+            <h2>هنوز سفارشی ثبت نشده است.</h2>
+            <p>بعد از ثبت اولین سفارش مشتری، اطلاعات آن در این قسمت نمایش داده می‌شود.</p>
+        </section>
+
+    {% endif %}
+
+</main>
+
+</body>
+</html>
